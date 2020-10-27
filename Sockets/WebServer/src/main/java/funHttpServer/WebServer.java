@@ -235,7 +235,6 @@ class WebServer {
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
           String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-          //System.out.println(json);
 
           builder.append("Check the todos mentioned in the Java source file");
           // TODO: Parse the JSON returned by your fetch and create an appropriate
@@ -245,12 +244,25 @@ class WebServer {
           // amehlhase, 46384989 -> ser316examples
           // amehlhase, 46384989 -> test316
 
-          // create a new json object
-          JSONObject output = new JSONObject(json);
-          
-          //System.out.println(output.getString("name"));
-          
+          // create a new json array
+          JSONArray array = new JSONArray(json);
 
+          for (int i = 0; i < array.length(); i++) {
+            String login = (array.getJSONObject(i).getJSONObject("owner").getString("login"));
+            int id = array.getJSONObject(i).getInt("id");
+            String name = array.getJSONObject(i).getString("name");
+            System.out.println(login + ", " + id + ", " + name);
+          }
+
+          builder.append("HTTP/1.1 200 OK\n");
+          builder.append("Content-Type: text/html; charset=utf-8\n");
+          builder.append("\n");
+          for (int i = 0; i < array.length(); i++) {
+            String login = array.getJSONObject(i).getJSONObject("owner").getString("login");
+            int id = array.getJSONObject(i).getInt("id");
+            String name = array.getJSONObject(i).getString("name");
+            builder.append(login + ", " + id + " -> " + name);
+          }
 
         } else {
           // if the request is not recognized at all
