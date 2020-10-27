@@ -27,8 +27,6 @@ import java.util.LinkedHashMap;
 import java.nio.charset.Charset;
 import org.json.*;
 
-import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
-
 class WebServer {
   public static void main(String args[]) {
     WebServer server = new WebServer(9000);
@@ -248,10 +246,10 @@ class WebServer {
           // amehlhase, 46384989 -> test316
 
           // create a new json object
-          JSONObject output = new JSONOBject(json);
-          System.out.println(output.getString("name"));
+          JSONObject output = new JSONObject(json);
           
-
+          //System.out.println(output.getString("name"));
+          
 
 
         } else {
