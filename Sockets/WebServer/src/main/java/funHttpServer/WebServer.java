@@ -25,6 +25,9 @@ import java.util.Random;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.nio.charset.Charset;
+import org.json.*;
+
+import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
 
 class WebServer {
   public static void main(String args[]) {
@@ -214,8 +217,6 @@ class WebServer {
           builder.append("\n");
           builder.append("Result is: " + result);
 
-          // TODO: Include error handling here with a correct error code and
-          // a response that makes sense
           // Catch exception if incorrect values are used, i.e a string instead of an int
           } catch (NumberFormatException e) {
             builder.append("HTTP/1.1 400 Bad Request\n");
@@ -236,7 +237,7 @@ class WebServer {
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
           String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-          System.out.println(json);
+          //System.out.println(json);
 
           builder.append("Check the todos mentioned in the Java source file");
           // TODO: Parse the JSON returned by your fetch and create an appropriate
@@ -245,6 +246,13 @@ class WebServer {
           // amehlhase, 46384989 -> memoranda
           // amehlhase, 46384989 -> ser316examples
           // amehlhase, 46384989 -> test316
+
+          // create a new json object
+          JSONObject output = new JSONOBject(json);
+          System.out.println(output.getString("name"));
+          
+
+
 
         } else {
           // if the request is not recognized at all
