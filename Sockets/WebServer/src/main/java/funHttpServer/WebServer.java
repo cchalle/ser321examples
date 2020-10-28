@@ -224,36 +224,15 @@ class WebServer {
           }
 
         } else if (request.contains("github?")) {
-          // pulls the query from the request and runs it with GitHub's REST API
-          // check out https://docs.github.com/rest/reference/
-          //
-          // HINT: REST is organized by nesting topics. Figure out the biggest one first,
-          //     then drill down to what you care about
-          // "Owner's repo is named RepoName. Example: find RepoName's contributors" translates to
-          //     "/repos/OWNERNAME/REPONAME/contributors"
 
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
           String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
 
-          builder.append("Check the todos mentioned in the Java source file");
-          // TODO: Parse the JSON returned by your fetch and create an appropriate
-          // response
-          // and list the owner name, owner id and name of the public repo on your webpage, e.g.
-          // amehlhase, 46384989 -> memoranda
-          // amehlhase, 46384989 -> ser316examples
-          // amehlhase, 46384989 -> test316
-
           // create a new json array
           JSONArray array = new JSONArray(json);
 
-          for (int i = 0; i < array.length(); i++) {
-            String login = (array.getJSONObject(i).getJSONObject("owner").getString("login"));
-            int id = array.getJSONObject(i).getInt("id");
-            String name = array.getJSONObject(i).getString("name");
-            System.out.println(login + ", " + id + ", " + name);
-          }
-
+          // Generate response
           builder.append("HTTP/1.1 200 OK\n");
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
@@ -261,7 +240,7 @@ class WebServer {
             String login = array.getJSONObject(i).getJSONObject("owner").getString("login");
             int id = array.getJSONObject(i).getInt("id");
             String name = array.getJSONObject(i).getString("name");
-            builder.append(login + ", " + id + " -> " + name);
+            builder.append("Repository " + (i + 1) + ": " + login + ", " + id + " -> " + name + "<br>");
           }
 
         } else {
